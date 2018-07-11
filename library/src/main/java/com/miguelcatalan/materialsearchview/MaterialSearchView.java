@@ -79,6 +79,12 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
 
     private Context mContext;
 
+    public interface SearchSelectionHandler {
+        void onItemClick(int index);
+    }
+
+    public SearchSelectionHandler delegate = null;
+
     public MaterialSearchView(Context context) {
         this(context, null);
     }
@@ -431,7 +437,11 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
             setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    setQuery((String) searchAdapter.getItem(position), submit);
+                    if (delegate != null) {
+                        delegate.onItemClick(position);
+                    } else {
+                        setQuery((String) searchAdapter.getItem(position), submit);
+                    }
                 }
             });
         } else {
