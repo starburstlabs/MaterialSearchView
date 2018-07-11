@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
     private Drawable suggestionIcon;
     private LayoutInflater inflater;
     private boolean ellipsize;
+    private boolean isWebSearch;
 
     public SearchAdapter(Context context, String[] suggestions) {
         inflater = LayoutInflater.from(context);
@@ -34,12 +36,17 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
         this.suggestions = suggestions;
     }
 
-    public SearchAdapter(Context context, String[] suggestions, Drawable suggestionIcon, boolean ellipsize) {
+    public SearchAdapter(Context context, String[] suggestions, Drawable suggestionIcon, boolean ellipsize, boolean webSearch) {
         inflater = LayoutInflater.from(context);
         data = new ArrayList<>();
         this.suggestions = suggestions;
         this.suggestionIcon = suggestionIcon;
         this.ellipsize = ellipsize;
+        this.isWebSearch = webSearch;
+    }
+
+    public void updateSuggestions(String[] suggestions) {
+        this.suggestions = suggestions;
     }
 
     @Override
@@ -53,9 +60,14 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
                     // Retrieve the autocomplete results.
                     List<String> searchData = new ArrayList<>();
 
-                    for (String string : suggestions) {
-                        if (string.toLowerCase().startsWith(constraint.toString().toLowerCase())) {
-                            searchData.add(string);
+                    if (isWebSearch) {
+                        searchData.addAll(Arrays.asList(suggestions));
+                    }
+                    else {
+                        for (String string : suggestions) {
+                            if (string.toLowerCase().startsWith(constraint.toString().toLowerCase())) {
+                                searchData.add(string);
+                            }
                         }
                     }
 
