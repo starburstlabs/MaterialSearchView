@@ -65,13 +65,14 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
     private OnQueryTextListener mOnQueryChangeListener;
     private SearchViewListener mSearchViewListener;
 
+    private SearchAdapter searchAdapter;
     private ListAdapter mAdapter;
 
     private SavedState mSavedState;
     private boolean submit = false;
 
     private boolean ellipsize = false;
-
+    private boolean isWebSearch = false;
     private boolean allowVoiceSearch;
     private Drawable suggestionIcon;
 
@@ -185,7 +186,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mUserQuery = s;
-                startFilter(s);
+                if (!isWebSearch) startFilter(s);
                 MaterialSearchView.this.onTextChanged(s);
             }
 
@@ -358,6 +359,15 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         allowVoiceSearch = voiceSearch;
     }
 
+    /**
+     * Setting this to true will bypass filtering, allowing all results from web to be shown.
+     *
+     * @param webSearch
+     */
+    public void setWebSearch(boolean webSearch) {
+        this.isWebSearch = webSearch;
+    }
+
     //Public Methods
 
     /**
@@ -395,7 +405,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
     public void setAdapter(ListAdapter adapter) {
         mAdapter = adapter;
         mSuggestionsListView.setAdapter(adapter);
-        startFilter(mSearchSrcTextView.getText());
+        if (!isWebSearch) startFilter(mSearchSrcTextView.getText());
     }
 
     /**
@@ -406,17 +416,26 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
     public void setSuggestions(String[] suggestions) {
         if (suggestions != null && suggestions.length > 0) {
             mTintView.setVisibility(VISIBLE);
-            final SearchAdapter adapter = new SearchAdapter(mContext, suggestions, suggestionIcon, ellipsize);
-            setAdapter(adapter);
+            searchAdapter = new SearchAdapter(mContext, suggestions, suggestionIcon, ellipsize, isWebSearch);
+            setAdapter(searchAdapter);
 
             setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    setQuery((String) adapter.getItem(position), submit);
+                    setQuery((String) searchAdapter.getItem(position), submit);
                 }
             });
         } else {
             mTintView.setVisibility(GONE);
+        }
+    }
+
+    public void updateSuggestions(String[] suggestions) {
+        if (mAdapter == null) {
+            setSuggestions(suggestions);
+        } else {
+            searchAdapter.updateSuggestions(suggestions);
+            startFilter(mSearchSrcTextView.getText());
         }
     }
 
