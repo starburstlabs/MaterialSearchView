@@ -76,6 +76,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
     private boolean isWebSearch = false;
     private boolean allowVoiceSearch;
     private Drawable suggestionIcon;
+    private int suggestionTextColor;
 
     private Context mContext;
 
@@ -141,6 +142,10 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
 
             if (a.hasValue(R.styleable.MaterialSearchView_searchSuggestionIcon)) {
                 setSuggestionIcon(a.getDrawable(R.styleable.MaterialSearchView_searchSuggestionIcon));
+            }
+
+            if (a.hasValue(R.styleable.MaterialSearchView_searchSuggestionTextColor)) {
+                setSuggestionTextColor(a.getColor(R.styleable.MaterialSearchView_searchSuggestionTextColor, 0));
             }
 
             if (a.hasValue(R.styleable.MaterialSearchView_android_inputType)) {
@@ -359,6 +364,8 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         }
     }
 
+    public void setSuggestionTextColor(int color) { suggestionTextColor = color; };
+
     public void setCursorDrawable(int drawable) {
         try {
             // https://github.com/android/platform_frameworks_base/blob/kitkat-release/core/java/android/widget/TextView.java#L562-564
@@ -431,7 +438,8 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
     public void setSuggestions(String[] suggestions) {
         if (suggestions != null && suggestions.length > 0) {
             mTintView.setVisibility(VISIBLE);
-            searchAdapter = new SearchAdapter(mContext, suggestions, suggestionIcon, ellipsize, isWebSearch);
+            searchAdapter = new SearchAdapter(mContext, suggestions, suggestionIcon,
+                    suggestionTextColor, ellipsize, isWebSearch);
             setAdapter(searchAdapter);
 
             setOnItemClickListener(new AdapterView.OnItemClickListener() {

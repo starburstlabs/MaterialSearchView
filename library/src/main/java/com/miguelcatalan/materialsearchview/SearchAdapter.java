@@ -26,6 +26,7 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
     private ArrayList<String> data;
     private String[] suggestions;
     private Drawable suggestionIcon;
+    private int suggestionTextColor;
     private LayoutInflater inflater;
     private boolean ellipsize;
     private boolean isWebSearch;
@@ -36,11 +37,13 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
         this.suggestions = suggestions;
     }
 
-    public SearchAdapter(Context context, String[] suggestions, Drawable suggestionIcon, boolean ellipsize, boolean webSearch) {
+    public SearchAdapter(Context context, String[] suggestions, Drawable suggestionIcon,
+                         int suggestionTextColor, boolean ellipsize, boolean webSearch) {
         inflater = LayoutInflater.from(context);
         data = new ArrayList<>();
         this.suggestions = suggestions;
         this.suggestionIcon = suggestionIcon;
+        this.suggestionTextColor = suggestionTextColor;
         this.ellipsize = ellipsize;
         this.isWebSearch = webSearch;
     }
@@ -135,6 +138,11 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
 
         public SuggestionsViewHolder(View convertView) {
             textView = (TextView) convertView.findViewById(R.id.suggestion_text);
+
+            if (suggestionTextColor != 0) {
+                textView.setTextColor(suggestionTextColor);
+            }
+
             if (suggestionIcon != null) {
                 imageView = (ImageView) convertView.findViewById(R.id.suggestion_icon);
                 imageView.setImageDrawable(suggestionIcon);
