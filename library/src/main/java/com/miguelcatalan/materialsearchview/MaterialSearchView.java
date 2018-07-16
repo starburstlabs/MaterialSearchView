@@ -427,7 +427,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
     public void setAdapter(ListAdapter adapter) {
         mAdapter = adapter;
         mSuggestionsListView.setAdapter(adapter);
-        if (!isWebSearch) startFilter(mSearchSrcTextView.getText());
+        startFilter(mSearchSrcTextView.getText());
     }
 
     /**
@@ -437,7 +437,6 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
      */
     public void setSuggestions(String[] suggestions) {
         if (suggestions != null && suggestions.length > 0) {
-            mTintView.setVisibility(VISIBLE);
             searchAdapter = new SearchAdapter(mContext, suggestions, suggestionIcon,
                     suggestionTextColor, ellipsize, isWebSearch);
             setAdapter(searchAdapter);
@@ -452,8 +451,6 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
                     }
                 }
             });
-        } else {
-            mTintView.setVisibility(GONE);
         }
     }
 
@@ -566,6 +563,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
 
         } else {
             mSearchLayout.setVisibility(VISIBLE);
+            mTintView.setVisibility(VISIBLE);
             if (mSearchViewListener != null) {
                 mSearchViewListener.onSearchViewShown();
             }
@@ -582,6 +580,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
 
             @Override
             public boolean onAnimationEnd(View view) {
+                mTintView.setVisibility(VISIBLE);
                 if (mSearchViewListener != null) {
                     mSearchViewListener.onSearchViewShown();
                 }
@@ -616,6 +615,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         clearFocus();
 
         mSearchLayout.setVisibility(GONE);
+        mTintView.setVisibility(GONE);
         if (mSearchViewListener != null) {
             mSearchViewListener.onSearchViewClosed();
         }
