@@ -469,6 +469,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
     public void dismissSuggestions() {
         if (mSuggestionsListView.getVisibility() == VISIBLE) {
             mSuggestionsListView.setVisibility(GONE);
+            searchAdapter.clearSuggestions();
         }
     }
 
@@ -580,7 +581,6 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
 
             @Override
             public boolean onAnimationEnd(View view) {
-                mTintView.setVisibility(VISIBLE);
                 if (mSearchViewListener != null) {
                     mSearchViewListener.onSearchViewShown();
                 }
@@ -600,6 +600,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         } else {
             AnimationUtil.fadeInView(mSearchLayout, mAnimationDuration, animationListener);
         }
+        AnimationUtil.fadeInView(mTintView);
     }
 
     /**
