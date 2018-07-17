@@ -55,6 +55,7 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
     public void clearSuggestions() {
         this.suggestions = null;
         data.clear();
+        notifyDataSetChanged();
     }
 
     @Override
