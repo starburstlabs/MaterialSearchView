@@ -11,10 +11,10 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 27
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode 1
         versionName "1.4.0"
     }
@@ -28,8 +28,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:23.1.1'
-    implementation 'com.android.support:design:23.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
 }
 
 publish {
